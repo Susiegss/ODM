@@ -300,6 +300,7 @@
 import Nav from '@/components/nav'
 import Tab from '@/components/table'
 import TabJY from '@/components/common/table_jiaoyi'
+import {getAttributes} from '@/api/index.js'
 export default {
     name:'insert',
     components:{Nav,Tab,TabJY},
@@ -309,7 +310,10 @@ export default {
         },
         formList: { //表单的原始值
             type: Object
-        }
+        },
+        type: { //表单的原始值
+            type: String
+        },
     },
     data() {
         return {
@@ -319,32 +323,8 @@ export default {
             jiliangdanweiChoices:["Acre","Ampere","Bag","Box"],
             fileList: [{name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'}, {name: 'food2.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
                     }],
-            //模拟后台传来的属性数据
-            attributes:[
-                
-                {attribute:"图案类型",
-                name:"patternType",
-                choices:['animal','print'],
-                type:"select",
-                },
-                {attribute:"季节",
-                name:"season",
-                choices:['winter','spring','summer','autumn'],
-                type:"select",
-                },
-                {
-                attribute:"装饰",
-                name:"decorate",
-                choices:['none','cystal','button','Lace','Rivet','none1','cystal1','button1','Lace1','Rivet1'],
-                type:"checkbox",
-                },
-                {
-                attribute:"产品名称1",
-                name:"name1",
-                choices:'',
-                type:"write",
-                }
-            ],
+            //模拟后台传来的动态属性数据
+            attributes:[],
             //存储用户填写信息
             form:{   
                 // formid:'',
@@ -401,17 +381,49 @@ export default {
             }
     },
     created(){
-        for(let i=0; i< this.attributes.length; i++){
-          let obj=this.attributes[i]
-        //将后端传来的动态的属性的名字都添加到用户需要填写的form中
-          console.log(obj.type)
-          if(obj.type == 'checkbox'){
-              this.$set(this.form,obj.name,[])
-          }else{         
-            this.$set(this.form,obj.name,'')
-          }
-      }
-      console.log(this.form)
+        //先判断是新建还是修改
+        console.log(this.dialogType)
+        console.log("insert"+this.type)
+        if(this.dialogType){
+            this.form="",
+            this.form=this.formList;
+            let t=this.type
+            getAttributes(this.t)
+            .then(res =>{
+            let a=res.data.attributes
+            this.attributes=a;
+            console.log(this.attributes)
+            })           
+        }
+        
+        else{
+            //拿到选的类型-上一个最后一个选项值,获取动态属性
+            let t=this.$route.query.path.split(">>").pop()
+        
+        //console.log(t);
+        getAttributes(this.t)
+        .then(res =>{
+            let a=res.data.attributes
+            this.attributes=a;
+            console.log(this.attributes)
+            if(res.code ==='0'){
+                for(let i=0; i< a.length; i++){
+                    let obj=a[i]
+                    //将后端传来的动态的属性的名字都添加到用户需要填写的form中
+                    console.log(obj.type)
+                    //只有checkbox类型是多选是数组
+                    if(obj.type == 'checkbox'){
+                        this.$set(this.form,obj.name,[])
+                    }else{         
+                        this.$set(this.form,obj.name,'')
+                    }
+                }
+            }else{
+                console.log("请求错误")
+            }
+        })
+        console.log(this.form)
+        }
     },
     mounted () {
       // 事件监听滚动条
@@ -449,7 +461,7 @@ export default {
       //包装图片
       handlePictureCardPreview(file) {
         
-        console.log(file)
+        console.log(this.form)
         this.form.bzphotoslist.push(file.url)
         console.log(this.form.bzphotoslist)
 

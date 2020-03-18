@@ -57,6 +57,7 @@
 </template>
 <script>
 import Header from '@/components/Header'
+import {getAllSubmit} from '@/api/index.js'
 export default {
     name:'allSubmit',
     components:{Header},
@@ -66,17 +67,17 @@ export default {
             currentPage:1,
             pageSize: 6,
             tableData: [
-                {formid:"12345",date:"2020-2-26"},
-                {formid:"12345",date:"2020-2-26"},
-                {formid:"12345",date:"2020-2-26"},
-                {formid:"12345",date:"2020-2-26"},
-                {formid:"12345",date:"2020-2-26"},
-                {formid:"12345",date:"2020-2-26"},
-                {formid:"12345",date:"2020-2-26"},
-                {formid:"12345",date:"2020-2-26"},
-                {formid:"12345",date:"2020-2-26"},
-                {formid:"12345",date:"2020-2-26"},
-                {formid:"12345",date:"2020-2-26"},
+                // {formid:"12345",date:"2020-2-26"},
+                // {formid:"12345",date:"2020-2-26"},
+                // {formid:"12345",date:"2020-2-26"},
+                // {formid:"12345",date:"2020-2-26"},
+                // {formid:"12345",date:"2020-2-26"},
+                // {formid:"12345",date:"2020-2-26"},
+                // {formid:"12345",date:"2020-2-26"},
+                // {formid:"12345",date:"2020-2-26"},
+                // {formid:"12345",date:"2020-2-26"},
+                // {formid:"12345",date:"2020-2-26"},
+                // {formid:"12345",date:"2020-2-26"},
                 
             ],
             editVisible: false,
@@ -87,7 +88,14 @@ export default {
         };
     },
     created() {
-        this.getData();
+        getAllSubmit(localStorage.getItem('userInfo'))
+        .then(res =>{
+            console.log(res)
+            let a=res.data.forms;
+            this.tableData=a;
+            console.log(this.tableData)
+            
+        })
     },
     methods: {
         // 获取 easy-mock 的模拟数据
@@ -106,13 +114,26 @@ export default {
         //查看
         handleLook(index, row){
             console.log(row.formid);
-            this.$router.push("/look")
+            
+            //this.$router.push("/look");
+            this.$router.push({
+            name:'look',
+            query:{
+                formid:row.formid
+            }
+        })
         },
         //修改编辑
         handleEdit(index, row) {
             console.log(row.formid);
-            //通过表单号拿到后端传来的本表单数据，带着表单号，传给insert页面
-            this.$router.push("insert")
+            //通过表单号拿到后端传来的本表单数据，带着表单号，传给edit页面
+            //this.$router.push("edit")
+            this.$router.push({
+            name:'edit',
+            query:{
+                formid:row.formid
+            }
+            })
         },
         // 分页导航
         handlePageChange(val) {

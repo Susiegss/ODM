@@ -15,7 +15,7 @@
                         <i class="el-icon-caret-bottom"></i>
                     </span>
                     <el-dropdown-menu slot="dropdown">
-                        <router-link >
+                        <router-link to="">
                             <el-dropdown-item>我的信息</el-dropdown-item>
                        </router-link>
                        <router-link to="/allSubmit">

@@ -47,7 +47,7 @@ export default {
        handleLastChild(value){
            console.log(value[value.length-1]);
            const path=value.join('>>');
-           console.log(path);
+           //console.log(path);
 
         //    this.active ++;
         //    this.$router.push('/insert')

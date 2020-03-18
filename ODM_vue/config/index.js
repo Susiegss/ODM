@@ -13,7 +13,7 @@ module.exports = {
     proxyTable: {
       //代理
       '/api': {
-        target: 'http://localhost:5000/api',//请求地址
+        target: 'https://www.fastmock.site/mock/882ad31d909453b04049aa07c5c2066f/ODM/api',//请求地址
         ws: true,
         changeOrigin: true,// 如果接口跨域，需要进行这个参数配置
         pathRewrite: {

@@ -50,6 +50,12 @@ export default new Router({
       meta: { title: '查看' }
     },
     {
+      path:'/edit',
+      name:'edit',
+      component: ()=>import ('@/pages/edit'),
+      meta: { title: '修改' }
+    },
+    {
         path: '*',
         component: () => import ('@/pages/notFound/404.vue'),
         meta: { title: '404' }

@@ -20,6 +20,7 @@
 </template>
 <script>
 import Header from "@/components/Header";
+import {lookForm} from "@/api/index"
 export default {
   name: "look",
   components: { Header },
@@ -31,42 +32,22 @@ export default {
   data() {
     return {
       rwDispatcherState: "write",
-      formdata: [
-        { attribute: "产品类型", name: "productType", choices: "直接下单品" },
-        {
-          attribute: "图案类型",
-          name: "patternType",
-          choices: ["animal", "print"]
-        },
-        {
-          attribute: "季节",
-          name: "season",
-          choices: ["winter", "spring", "summer", "autumn"]
-        },
-        {
-          attribute: "装饰",
-          name: "decorate",
-          choices: [
-            "none",
-            "cystal",
-            "button",
-            "Lace",
-            "Rivet",
-            "none1",
-            "cystal1",
-            "button1",
-            "Lace1",
-            "Rivet1"
-          ]
-        }
-      ]
+      formdata: []
     };
   },
   created() {
-    
+    const formid=this.$route.query.formid
+    lookForm(formid).then(
+      res =>{
+        console.log(res)
+        if(res.code==='0'){
+          this.formdata=res.data.formdata
+        }
+      }
+    )
   },
   methods: {
-    //大数相加
+    
     
   },
   
